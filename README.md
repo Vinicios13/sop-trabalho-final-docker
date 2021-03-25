@@ -11,8 +11,8 @@ De permissão ao executavel
 ```bat
 chmod +x stress.sh  
 ```
-Gerar o log
+Gerar os dados
 ```bat
 ./stress.sh
 ```
-*Todo dado extraido é salvo em "data.txt"*
+*Todo dado extraido é salvo em "data.csv"*
