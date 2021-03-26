@@ -1,4 +1,4 @@
-# Repositório de trabalho final da disciplina de sistema operacional
+# Repositório do trabalho final da disciplina de sistemas operacionais 
 ## Tema: Docker
 
 ### Requisitos: 
