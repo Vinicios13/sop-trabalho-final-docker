@@ -3,7 +3,7 @@ services:
   stress:
     container_name: stress
     image: progrium/stress
-    command: --vm 5 --vm-bytes 512M --timeout 60s
+    command: --vm 5 --vm-bytes 512M --timeout 600s
     deploy:
       resources:
         limits:
