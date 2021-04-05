@@ -1,6 +1,7 @@
 #!/bin/bash
 
-get_now() {
+#obtém otempo de execução do script
+get_runtime() {
     start=$1
     end=$(date +%s.%N)
     now=$( echo "scale=2; ($end - $start)/1" | bc -l )
@@ -16,29 +17,30 @@ get_now() {
     fi
 }
 
-#run the container
+#executa o contêiner
 docker-compose up &
 pid=$!
 
-#clean file contents
+#deleta os conteudos do arquivo
 > data.csv
 
-# headers
+# cabeçaho
 echo "t, CPU%, RAM(MB)" >> data.csv
 
 start=`date +%s.%N`
 
+#enquanto o processo do contêiner estiver ativo continua gerando os dados
 while kill -0 $pid 2> /dev/null; do
-    now=$(get_now $start)
+    now=$(get_runtime $start)
     echo "$now PROCESS IS RUNNING"
    
-    #generate data
+    #gera os dados
     docker stats --no-stream | grep stress \
         | awk -v var="$now" 'BEGIN { ORS=" " }; { printf "%s, ",var } { printf "%s, ",$3 } { printf "%s\n", $4 }' \
         |  sed -e 's/%//g' >> data.csv;
 done
 
-#normalize GiB and MiB values
+#normaliza os valores de GiB e MiB
 while read p; do
     if [[ $p == *"GiB"* ]]; then        
         p=$(echo $p | sed -e 's/GiB//g' | sed -E 's/(.*)\./\1/g')
@@ -46,10 +48,14 @@ while read p; do
         p=$(echo $p | sed -e 's/MiB//g')
     fi
 
+    #arquivo temporário com os valores corretos
     $(echo "$p" >> tmp.csv)
 done <data.csv
 
+#apaga o arquivo original
 rm data.csv
+
+#move o arquivo temporário para ser o novo data.csv 
 mv tmp.csv data.csv
 
 echo "PROCESS TERMINATED"
