@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#obtém otempo de execução do script
+#obtém o tempo de execução do script
 get_runtime() {
     start=$1
     end=$(date +%s.%N)
@@ -24,7 +24,7 @@ pid=$!
 #deleta os conteudos do arquivo
 > data.csv
 
-# cabeçaho
+# cabeçalho
 echo "t, CPU%, RAM(MB)" >> data.csv
 
 start=`date +%s.%N`
